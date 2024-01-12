@@ -1,0 +1,4 @@
+{"cmake.configureSettings": {
+    "ENABLE_CLANG_TIDY": 1,
+    "ENABLE_WERROR": 1
+}}
