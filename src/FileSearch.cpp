@@ -4,18 +4,23 @@
 
 #include "FileSearch.hpp"
 
-void FileSearch::doSearch() const noexcept {
-  for (const auto &entity : std::filesystem::recursive_directory_iterator(path)) {
-    if (entity.is_regular_file() && FileSearch::_isFileText(entity.path())) {
-      std::ifstream stream(entity.path());
-      std::string line;
-      while (std::getline(stream, line)) {
-        if (line.find(this->searchContent) != std::string::npos) {
-          std::cout << entity.path() << std::endl;
-          break;
-        }
+void FileSearch::fileFilter(const std::filesystem::directory_entry &entity,
+                            std::string_view searchContent) noexcept {
+  if (entity.is_regular_file() && FileSearch::_isFileText(entity.path())) {
+    std::ifstream stream(entity.path());
+    std::string line;
+    while (std::getline(stream, line)) {
+      if (line.find(searchContent) != std::string::npos) {
+        std::cout << entity.path() << std::endl;
+        break;
       }
     }
+  }
+}
+
+void FileSearch::doSearch() const noexcept {
+  for (const auto &entity : std::filesystem::recursive_directory_iterator(path)) {
+    FileSearch::fileFilter(entity, this->searchContent);
   }
 }
 

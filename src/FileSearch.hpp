@@ -30,6 +30,8 @@ private:
   std::filesystem::path path;
   std::string_view searchContent;
   [[nodiscard]] static bool _isFileText(const std::filesystem::path &_path) noexcept;
+  static void fileFilter(const std::filesystem::directory_entry &entity,
+                          std::string_view  searchContent) noexcept;
 };
 
 #endif
