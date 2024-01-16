@@ -9,6 +9,7 @@
 #include <iterator>
 #include <string>
 #include <string_view>
+#include <utility>
 class FileSearch {
 public:
   /**
@@ -16,41 +17,19 @@ public:
       @param _path: sandbox path
       @param _content: search content
   */
-  FileSearch(std::filesystem::path _path, std::string_view _content)
-      : path(_path), searchContent(_content) {
+  FileSearch(std::filesystem::path _path, const std::string_view _content)
+      : path(std::move(_path)), searchContent(_content) {
   }
 
   /**
   @brief main function for search
   */
-  void doSearch() {
-    for (const auto &entity : std::filesystem::recursive_directory_iterator(path)) {
-      if (entity.is_regular_file() && _isFileText(entity.path())) {
-        std::ifstream stream(entity.path());
-        std::string line;
-        while (std::getline(stream, line)) {
-          if (line.find(this->searchContent) != std::string::npos) {
-            std::cout << entity.path() << std::endl;
-            break;
-          }
-        }
-      }
-    }
-  }
+  void doSearch() const noexcept;
 
 private:
   std::filesystem::path path;
   std::string_view searchContent;
-  bool _isFileText(const std::filesystem::path &_path) {
-    std::ifstream stream(_path);
-    unsigned char c;
-    while (stream >> c) {
-      if (std::isspace(c) == 0 && std::isprint(c) == 0) {
-        return false;
-      }
-    }
-    return true;
-  }
+  [[nodiscard]] static bool _isFileText(const std::filesystem::path &_path) noexcept;
 };
 
 #endif
