@@ -2,14 +2,11 @@
 #define __file_content_search_file_search__
 
 /// @brief file search main class
-#include <cctype>
 #include <filesystem>
-#include <fstream>
-#include <iostream>
-#include <iterator>
-#include <string>
+#include <memory>
 #include <string_view>
 #include <utility>
+#include "thread_pool/thread_pool.hpp"
 class FileSearch {
 public:
   /**
@@ -19,6 +16,9 @@ public:
   */
   FileSearch(std::filesystem::path _path, const std::string_view _content)
       : path(std::move(_path)), searchContent(_content) {
+    tp::ThreadPoolOptions options;
+    options.setThreadCount(std::thread::hardware_concurrency());
+    threadPool = std::make_unique<tp::ThreadPool>(options);
   }
 
   /**
@@ -31,7 +31,8 @@ private:
   std::string_view searchContent;
   [[nodiscard]] static bool _isFileText(const std::filesystem::path &_path) noexcept;
   static void fileFilter(const std::filesystem::directory_entry &entity,
-                          std::string_view  searchContent) noexcept;
+                         std::string_view searchContent) noexcept;
+  std::unique_ptr<tp::ThreadPool> threadPool;
 };
 
 #endif

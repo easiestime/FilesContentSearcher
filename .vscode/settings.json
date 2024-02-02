@@ -1,7 +1,7 @@
 {
     "cmake.configureSettings": {
-        "ENABLE_CLANG_TIDY": 1,
-        "ENABLE_WERROR": 1
+        "ENABLE_CLANG_TIDY": 0,
+        "ENABLE_WERROR": 0
     },
     "editor.formatOnSave": true
 }

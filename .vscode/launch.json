@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/build/fcsearch",
             "args": [
-                "/home/jesse/workspace/dev/FilesContentSearcher/test/testDir",
+                "/home/jesse",
                 "jesse"
             ],
             "stopAtEntry": false,
